@@ -50,6 +50,9 @@ class TestingAppApplicationTests
                 .isEqualTo(10)
                 .isCloseTo(9 , Offset.offset(2));
 
+
+        Assertions.assertThat("Sujit").isEqualTo("Ajit");   // suggests datatype based methods
+
         log.info("test addition is running");
 
     }
