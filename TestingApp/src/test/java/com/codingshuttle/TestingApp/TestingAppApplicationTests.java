@@ -35,43 +35,59 @@ class TestingAppApplicationTests
     @Test
     void testTwo() { log.info("test two is running"); }
 
+//    @Test
+//    void testAddition()
+//    {
+//        int a = 5 ;
+//        int b = 5;
+//
+//        int result = addTwoNumbers(a, b);
+//
+
+////        Assertions.assertEquals(10, result);         // import from JUnit/core.api
+////        // use assertEquals based on datatypes , there are multiple methods same named , but operate on diff datatypes
+//
+//        Assertions.assertThat(result)       // import from  org.assertj.core.api
+//                .isEqualTo(10)
+//                .isCloseTo(9 , Offset.offset(2));
+//
+//
+//        Assertions.assertThat("Sujit").isEqualTo("Ajit");   // suggests datatype based methods
+//
+//        log.info("test addition is running");
+//
+//    }
+//
+//    int addTwoNumbers(int a, int b){return a+b;}
+
     @Test
-    void testAddition()
+    void testDivideTwoNumbers_WhenDenominatorIsZero_ThenArithmaticExcp()
     {
-        int a = 5 ;
-        int b = 5;
+        int c = 5;
+        int d = 0;
 
-        int result = addTwoNumbers(a, b);
+        Assertions.assertThatThrownBy( () -> divideTwoNumbers(c, d) )
+                .isInstanceOf(ArithmeticException.class);
 
-//        Assertions.assertEquals(10, result);         // import from JUnit/core.api
-//        // use assertEquals based on datatypes , there are multiple methods same named , but operate on diff datatypes
-
-        Assertions.assertThat(result)       // import from  org.assertj.core.api
-                .isEqualTo(10)
-                .isCloseTo(9 , Offset.offset(2));
-
-
-        Assertions.assertThat("Sujit").isEqualTo("Ajit");   // suggests datatype based methods
-
-        log.info("test addition is running");
-
+        log.info("test divide is running");
     }
 
-    int addTwoNumbers(int a, int b){return a+b;}
+    double divideTwoNumbers(int a, int b)
+    {
+        try
+        {
+            // return (double) a / b;
+            // This will NOT throw an exception because the operation becomes floating-point division.
+            // In Java, dividing a floating-point number by zero results in Infinity instead of an exception.
+
+            return a / b;
+            // This WILL throw an ArithmeticException if b is 0 because integer division by zero is not allowed in Java.
+        }
+        catch(ArithmeticException e)
+        {
+            log.info("Arithmetic Exception Found " + e.getMessage());
+            throw new ArithmeticException(e.getMessage());
+        }
+    }
 
 }
-
-//Used Assertions from JUnit ,
-// (NOTES -
-// Assertions in JUnit are used to verify that the expected result matches the actual result during testing.
-// 2) If the condition inside an assertion is true, the test passes; if false, the test fails.
-// 3) Common assertions include assertEquals(), assertTrue(), assertFalse(), assertNull(), and assertNotNull().
-// 4)   Assertions help ensure that the application logic behaves correctly and detect errors early in the testing phase.,
-// there are lots of functions which have same name but work wih diff datatypes , so use wisely )
-
-//        Used AssertJ to check test , (NOtes - AssertJ provides more readable and fluent assertions compared to JUnit’s basic assertions.
-//        2) It allows chaining of assertions using a natural language style like assertThat(value).isEqualTo(...), which improves code clarity.
-//        3) AssertJ offers a large set of specialized assertions for collections, maps, exceptions, strings, and more.
-//        4) It provides better and more descriptive failure messages, making debugging easier.
-//        5) AssertJ supports advanced features like filtering, extracting, and soft assertions.
-//        6) Overall, AssertJ helps write cleaner, more expressive, and maintainable test code than standard JUnit assertions.
