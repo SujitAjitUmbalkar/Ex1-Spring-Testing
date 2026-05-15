@@ -1,6 +1,8 @@
 package com.codingshuttle.TestingApp;
 
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -41,15 +43,17 @@ class TestingAppApplicationTests
 
         int result = addTwoNumbers(a, b);
 
-        Assertions.assertEquals(10, result);         // import from JUnit /api
-        // use assertEquals based on datatypes , there are multiple methods same named , but operate on diff datatypes
+//        Assertions.assertEquals(10, result);         // import from JUnit/core.api
+//        // use assertEquals based on datatypes , there are multiple methods same named , but operate on diff datatypes
+
+        Assertions.assertThat(result)       // import from  org.assertj.core.api
+                .isEqualTo(10)
+                .isCloseTo(9 , Offset.offset(2));
 
         log.info("test addition is running");
 
-        // if this equals then test would be pass
     }
 
-    // let's say this method is not test , written somewhere else , lets check if it works by Assertions
     int addTwoNumbers(int a, int b){return a+b;}
 
 }
@@ -61,3 +65,10 @@ class TestingAppApplicationTests
 // 3) Common assertions include assertEquals(), assertTrue(), assertFalse(), assertNull(), and assertNotNull().
 // 4)   Assertions help ensure that the application logic behaves correctly and detect errors early in the testing phase.,
 // there are lots of functions which have same name but work wih diff datatypes , so use wisely )
+
+//        Used AssertJ to check test , (NOtes - AssertJ provides more readable and fluent assertions compared to JUnit’s basic assertions.
+//        2) It allows chaining of assertions using a natural language style like assertThat(value).isEqualTo(...), which improves code clarity.
+//        3) AssertJ offers a large set of specialized assertions for collections, maps, exceptions, strings, and more.
+//        4) It provides better and more descriptive failure messages, making debugging easier.
+//        5) AssertJ supports advanced features like filtering, extracting, and soft assertions.
+//        6) Overall, AssertJ helps write cleaner, more expressive, and maintainable test code than standard JUnit assertions.
