@@ -8,6 +8,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -88,7 +89,12 @@ class EmployeeServiceImplTest
 //        Assert
         Assertions.assertThat(employeeDto).isNotNull();
         Assertions.assertThat(employeeDto.getEmail()).isEqualTo(mockEmployee.getEmail());
-        verify(employeeRepository, times(1)).save(any(Employee.class));
+
+        ArgumentCaptor<Employee> employeeArgumentCaptor = ArgumentCaptor.forClass(Employee.class);
+        verify(employeeRepository, times(1)).save(employeeArgumentCaptor.capture());
+
+        Employee capturedEmployee = employeeArgumentCaptor.getValue();
+        Assertions.assertThat(capturedEmployee.getEmail()).isEqualTo(mockEmployee.getEmail());
 
     }
 
