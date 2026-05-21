@@ -7,15 +7,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.TestcontainersConfiguration;
+//import org.springframework.context.annotation.Import;
 //import org.testcontainers.junit.jupiter.Testcontainers;
+//import org.testcontainers.utility.TestcontainersConfiguration;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
-@Testcontainers
-@Import(TestcontainersConfiguration.class)
+//@Testcontainers
+//@Import(TestcontainersConfiguration.class)
 @DataJpaTest
 //@AutoConfigureTestDatabase(
 //        replace = AutoConfigureTestDatabase.Replace.ANY
