@@ -50,6 +50,15 @@ class EmployeeRepositoryTest
     @Test
     void testFindByEmail_whenEmailIsNotFound_thenReturnEmptyEmployeeList()
     {
+//        Given
+        String email = "random@gmail.com";
+
+//        When
+        List<Employee> employees = employeeRepository.findByEmail(email);
+
+//        Then
+        Assertions.assertThat(employees).isNotNull();
+        Assertions.assertThat(employees).isEmpty();
 
     }
 }
