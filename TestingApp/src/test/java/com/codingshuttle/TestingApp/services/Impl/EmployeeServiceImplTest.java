@@ -21,7 +21,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 //@SpringBootTest        not needed
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)     // not needed
@@ -65,14 +65,15 @@ class EmployeeServiceImplTest
         Assertions.assertThat(employeeDto.getId()).isEqualTo(Id);
         Assertions.assertThat(employeeDto.getEmail()).isEqualTo(mockEmployee.getEmail());
 
-        // What is being tested
+//other methods
 
-        //employeeService.getEmployeeById(Id)
+        verify(employeeRepository).findById(2L);        // check if findById is called      // it will fail
 
-        //calls repository
-        //gets Employee object
-        //converts Employee → EmployeeDto
-        //returns correct DTO data
+        verify(employeeRepository, atLeast(2)).findById(1L); // does this method is called atleast 2 times
+
+        // Mockito provides more methods like that , read pdf
+
+
     }
 
 }
