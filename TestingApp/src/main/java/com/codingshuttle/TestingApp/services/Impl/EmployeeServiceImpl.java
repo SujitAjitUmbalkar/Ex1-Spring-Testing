@@ -17,8 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService
 {
-    private final EmployeeRepository employeeRepository;
-    private final ModelMapper modelMapper;
+    private final EmployeeRepository employeeRepository;        // mock them test
+    private final ModelMapper modelMapper;                              // mock them test
 
     @Override
     public EmployeeDto getEmployeeById(Long id)
