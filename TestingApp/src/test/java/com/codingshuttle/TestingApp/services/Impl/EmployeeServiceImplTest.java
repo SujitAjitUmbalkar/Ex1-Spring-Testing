@@ -5,6 +5,7 @@ import com.codingshuttle.TestingApp.entities.Employee;
 import com.codingshuttle.TestingApp.repositories.EmployeeRepository;
 import com.codingshuttle.TestingApp.services.EmployeeService;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -28,51 +30,65 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceImplTest
 {
-//    @Autowired
-//    private EmployeeService employeeService;          // use Implementation
-
     @Mock
     private EmployeeRepository employeeRepository;
 
-//    @Mock
-    @Spy        // use spy instead of mock
+    @Spy
     private ModelMapper modelMapper;
 
     @InjectMocks
     private EmployeeServiceImpl employeeService;
 
+    private Employee mockEmployee;
+    private EmployeeDto mockEmployeeDto;
+    private Long id;
+
+    @BeforeEach
+     void setUp()
+    {
+        Long Id = 1L;
+
+         mockEmployee = Employee.builder()
+                .id(Id)
+                .email("jeetumbalkar@gmail.com")
+                .salary(12000L)
+                .name("Sujit")
+                .build();
+
+         mockEmployeeDto = modelMapper.map(mockEmployee, EmployeeDto.class);
+    }
+
     @Test
     public void getEmployeeById_WhenIdIsPresent_ThenReturnEmployee()
     {
 //        Arrange
-
-        Long Id = 1L;
-
-    Employee mockEmployee = Employee.builder()
-            .id(Id)
-            .email("jeetumbalkar@gmail.com")
-            .salary(12000L)
-            .name("Sujit")
-            .build();
-
+        Long Id = mockEmployee.getId();
         when(employeeRepository.findById(Id)).thenReturn(Optional.of(mockEmployee));            // stubbing
 
 //        Act
-
         EmployeeDto employeeDto = employeeService.getEmployeeById(Id);      // it internally calls employeeR.findById(Id);
 
 //        Assert
+        Assertions.assertThat(employeeDto).isNotNull();
         Assertions.assertThat(employeeDto.getId()).isEqualTo(Id);
         Assertions.assertThat(employeeDto.getEmail()).isEqualTo(mockEmployee.getEmail());
 
-//other methods
+    }
 
-        verify(employeeRepository).findById(2L);        // check if findById is called      // it will fail
+    @Test
+    public void testCreateNewEmployee_WhenValidEmployee_ThenCreateNewEmployee()
+    {
+//        Arrange
+        when(employeeRepository.findByEmail(anyString())).thenReturn(List.of());        // return empty list
+        when(employeeRepository.save(any(Employee.class))).thenReturn(mockEmployee);   // if flow reaches to save , then return mockempl
 
-        verify(employeeRepository, atLeast(2)).findById(1L); // does this method is called atleast 2 times
+//        Act
+        EmployeeDto employeeDto = employeeService.createNewEmployee(mockEmployeeDto);
 
-        // Mockito provides more methods like that , read pdf
-
+//        Assert
+        Assertions.assertThat(employeeDto).isNotNull();
+        Assertions.assertThat(employeeDto.getEmail()).isEqualTo(mockEmployee.getEmail());
+        verify(employeeRepository, times(1)).save(any(Employee.class));
 
     }
 
