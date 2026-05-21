@@ -7,9 +7,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(
-        replace = AutoConfigureTestDatabase.Replace.ANY
-)
+//@AutoConfigureTestDatabase(
+//        replace = AutoConfigureTestDatabase.Replace.ANY
+//)
 class EmployeeRepositoryTest
 {
     @Test
