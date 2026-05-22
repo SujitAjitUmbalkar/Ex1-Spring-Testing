@@ -3,31 +3,19 @@ package com.codingshuttle.TestingApp.services.Impl;
 import com.codingshuttle.TestingApp.dto.EmployeeDto;
 import com.codingshuttle.TestingApp.entities.Employee;
 import com.codingshuttle.TestingApp.repositories.EmployeeRepository;
-import com.codingshuttle.TestingApp.services.EmployeeService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
-//@SpringBootTest        not needed
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)     // not needed
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceImplTest
 {
@@ -40,9 +28,12 @@ class EmployeeServiceImplTest
     @InjectMocks
     private EmployeeServiceImpl employeeService;
 
+    @Captor
+    ArgumentCaptor<Employee> employeeArgumentCaptor;        //  no need to create manually , preferred , globally used
+
     private Employee mockEmployee;
     private EmployeeDto mockEmployeeDto;
-    private Long id;
+
 
     @BeforeEach
      void setUp()
@@ -90,7 +81,7 @@ class EmployeeServiceImplTest
         Assertions.assertThat(employeeDto).isNotNull();
         Assertions.assertThat(employeeDto.getEmail()).isEqualTo(mockEmployee.getEmail());
 
-        ArgumentCaptor<Employee> employeeArgumentCaptor = ArgumentCaptor.forClass(Employee.class);
+//        ArgumentCaptor<Employee> employeeArgumentCaptor = ArgumentCaptor.forClass(Employee.class);
         verify(employeeRepository, times(1)).save(employeeArgumentCaptor.capture());
 
         Employee capturedEmployee = employeeArgumentCaptor.getValue();
