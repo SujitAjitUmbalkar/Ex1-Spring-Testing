@@ -87,10 +87,22 @@ class EmployeeServiceImplTest
         Employee capturedEmployee = employeeArgumentCaptor.getValue();
         Assertions.assertThat(capturedEmployee.getEmail()).isEqualTo(mockEmployee.getEmail());
 
-        //If the save() method is called multiple times,
-        //   ArgumentCaptor captures the arguments from each invocation and stores them internally in a list.
-        // We can retrieve and verify all captured objects using getAllValues().
 
     }
 
+    @Test
+    void createNewEmployee_WhenAttemptingToCreateEmployeeWithExistingEmail_ThenThrowException()
+    {
+    // Arrange
+    when(employeeRepository.findByEmail(mockEmployee.getEmail())).thenReturn(List.of(mockEmployee)); // list shouldnt be empty to enter in block of exception handelling in service class , check it
+
+//    Act
+        Assertions.assertThatThrownBy(() -> employeeService.createNewEmployee(mockEmployeeDto))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Employee already exists with email: " + mockEmployee.getEmail());
+
+        verify(employeeRepository, times(1)).findByEmail(mockEmployee.getEmail()); // check if that method is getting called by same email
+        verify(employeeRepository,never()).save(any()); // save method never called in this case
+
+    }
 }
