@@ -1,6 +1,12 @@
 package com.codingshuttle.TestingApp.controllers;
 
+import com.codingshuttle.TestingApp.dto.EmployeeDto;
+import com.codingshuttle.TestingApp.entities.Employee;
+import com.codingshuttle.TestingApp.repositories.EmployeeRepository;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -15,11 +21,52 @@ class EmployeeControllerTestIT
     @Autowired
     private WebTestClient webTestClient;
 
-    @Test
-    void test()
-    {
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
+    private Employee testEmployee;
+    private EmployeeDto testEmployeeDto;
+
+    @BeforeEach
+    void setup()
+    {
+        testEmployee = Employee.builder()
+                .name("Sujit")
+                .email("jeetumbalkar@gmail.com")
+                .salary(10000L)
+                .build();
+
+//        testEmployeeDto = EmployeeDto.builder()               // id doesnt assigned until entity is saved , occurs error
+//                .name("Sujit")
+//                .email("jeetumbalkar@gmail.com")
+//                .salary(10000L)
+//                .build();
+//
+//        testEmployeeDto.setId(testEmployee.getId());
     }
 
+    @Test
+    void testGetEmployeeById_success()
+    {
+        Employee savedEmployee =  employeeRepository.save(testEmployee);        // 1st save employee
+
+        testEmployeeDto = modelMapper.map(savedEmployee, EmployeeDto.class);
+
+        webTestClient.get()
+                .uri("/employees/{id}",savedEmployee.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(EmployeeDto.class)
+                .isEqualTo(testEmployeeDto);        // either this way (it need hashcode and equals method in Dto )
+//                .value(employeeDto ->
+//                {
+//                    Assertions.assertThat(employeeDto.getId()).isEqualTo(savedEmployee.getId());
+//                    Assertions.assertThat(employeeDto.getEmail()).isEqualTo(savedEmployee.getEmail());
+//                });
+
+    }
 
 }
