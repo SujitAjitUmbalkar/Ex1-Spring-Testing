@@ -5,6 +5,7 @@ import com.codingshuttle.TestingApp.entities.Employee;
 import com.codingshuttle.TestingApp.exceptions.ResourceNotFoundException;
 import com.codingshuttle.TestingApp.repositories.EmployeeRepository;
 import jakarta.persistence.Id;
+import org.assertj.core.api.AfterAssertionErrorCollected;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -200,5 +201,21 @@ class EmployeeServiceImplTest
 
         verify(employeeRepository, times(1)).existsById(Id);
         verify(employeeRepository,never()).delete(any());
+    }
+
+    @Test
+    void testDeleteEmployee_whenEmployeeIsValid_thenDeleteEmployee()
+    {
+//        Arrange
+        when(employeeRepository.existsById(Id)).thenReturn(Boolean.TRUE);
+
+//        Act
+        Assertions.assertThatCode(() -> employeeService.deleteEmployee(Id))
+                .doesNotThrowAnyException();
+
+//        Assert
+        verify(employeeRepository, times(1)).existsById(Id);
+        verify(employeeRepository,times(1)).deleteById(Id);
+
     }
 }
