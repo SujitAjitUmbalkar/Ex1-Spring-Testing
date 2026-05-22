@@ -18,25 +18,21 @@ public class EmployeeDto {
     private String name;
     private Long salary;
 
+
     @Override
-    public boolean equals(Object o)     // accepts object
-    {
-        if (this == o) return true;     // 1. check if objects are same
-        if (!(o instanceof EmployeeDto)) return false;  // 2. if not , then check o is instance of EmployeeDto
-
-        EmployeeDto other = (EmployeeDto) o;        // 3. if not then convert object in dto and check variables
-
-        return Objects.equals(id, other.id) &&
-                Objects.equals(email, other.email) &&
-                Objects.equals(name, other.name) &&
-                Objects.equals(salary, other.salary);
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        EmployeeDto that = (EmployeeDto) o;
+        return Objects.equals(id, that.id) && Objects.equals(email, that.email) && Objects.equals(name, that.name) && Objects.equals(salary, that.salary);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getEmail(), getName(), getSalary());
+        return Objects.hash(id, email, name, salary);
     }
 }
+
+
 
 
 /*
