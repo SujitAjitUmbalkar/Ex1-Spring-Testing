@@ -4,6 +4,7 @@ import com.codingshuttle.TestingApp.dto.EmployeeDto;
 import com.codingshuttle.TestingApp.entities.Employee;
 import com.codingshuttle.TestingApp.exceptions.ResourceNotFoundException;
 import com.codingshuttle.TestingApp.repositories.EmployeeRepository;
+import jakarta.persistence.Id;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,11 +36,12 @@ class EmployeeServiceImplTest
     private Employee mockEmployee;
     private EmployeeDto mockEmployeeDto;
 
+    Long Id = 1L;
 
     @BeforeEach
      void setUp()
     {
-        Long Id = 1L;
+         Id = 1L;
 
          mockEmployee = Employee.builder()
                 .id(Id)
@@ -120,6 +122,22 @@ class EmployeeServiceImplTest
 
         verify(employeeRepository, times(1)).findByEmail(mockEmployee.getEmail()); // check if that method is getting called by same email
         verify(employeeRepository,never()).save(any()); // save method never called in this case
+
+    }
+
+    @Test
+    void testUpdateEmployee_whenEmployeeDoesNotExists_thenThrowException()
+    {
+//        Assign
+        when(employeeRepository.findById(Id)).thenReturn(Optional.empty());
+
+//        Act and Assert
+        Assertions.assertThatThrownBy(()->employeeService.updateEmployee(Id, mockEmployeeDto))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Employee not found with id: " + Id);
+
+        verify(employeeRepository, times(1)).findById(Id);
+        verify(employeeRepository,never()).save(any());
 
     }
 }
