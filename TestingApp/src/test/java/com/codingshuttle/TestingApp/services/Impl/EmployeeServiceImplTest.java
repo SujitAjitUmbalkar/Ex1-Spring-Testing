@@ -2,6 +2,7 @@ package com.codingshuttle.TestingApp.services.Impl;
 
 import com.codingshuttle.TestingApp.dto.EmployeeDto;
 import com.codingshuttle.TestingApp.entities.Employee;
+import com.codingshuttle.TestingApp.exceptions.ResourceNotFoundException;
 import com.codingshuttle.TestingApp.repositories.EmployeeRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,6 +67,22 @@ class EmployeeServiceImplTest
         Assertions.assertThat(employeeDto.getEmail()).isEqualTo(mockEmployee.getEmail());
 
     }
+
+    @Test
+    public void getEmployeeById_WhenIdIsNotPresent_ThenThrowException()
+    {
+        Long Id = mockEmployee.getId();
+
+//        Arrange
+        when(employeeRepository.findById(Id)).thenReturn(Optional.empty()); // if id were present then it would return employee , here we want to test case for not getting id , so returning optional empty will redirect you to exception block
+//        Act & Assert
+        Assertions.assertThatThrownBy(()->employeeService.getEmployeeById(Id))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Employee not found with id: " + Id );
+
+        verify(employeeRepository, times(1)).findById(Id);
+    }
+
 
     @Test
     public void testCreateNewEmployee_WhenValidEmployee_ThenCreateNewEmployee()
