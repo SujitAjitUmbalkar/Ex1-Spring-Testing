@@ -140,4 +140,22 @@ class EmployeeServiceImplTest
         verify(employeeRepository,never()).save(any());
 
     }
+
+    @Test
+    void testUpdateEmployee_whenAttemptingToUpdateEmail_thenThrowException() {
+//        Arrange
+        when(employeeRepository.findById(mockEmployeeDto.getId())).thenReturn(Optional.of(mockEmployee));
+
+        mockEmployeeDto.setEmail("different@gmail.com");
+
+//        Act & Assert
+        Assertions.assertThatThrownBy(() -> employeeService.updateEmployee(mockEmployeeDto.getId(), mockEmployeeDto))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("The email of the employee cannot be updated (you cannot edit email ");
+
+        verify(employeeRepository, times(1)).findById(mockEmployeeDto.getId());
+       verify(employeeRepository,never()).save(any());
+
+    }
+
 }

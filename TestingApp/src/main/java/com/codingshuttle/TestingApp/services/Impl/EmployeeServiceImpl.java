@@ -62,9 +62,9 @@ public class EmployeeServiceImpl implements EmployeeService
 
         if (!employee.getEmail().equals(employeeDto.getEmail()))        // then check if that entity and input dto has same email
         {
-            log.error("Attempted to update email for employee with id: {}", id);
             throw new RuntimeException("The email of the employee cannot be updated (you cannot edit email ");
         }
+            log.error("Attempted to update email for employee with id: {}", id);
 
         modelMapper.map(employeeDto, employee);     //  convert input dto in existing entity and preserve id
         employee.setId(id);     // employee.setId(employeeDto.getId()) ;
