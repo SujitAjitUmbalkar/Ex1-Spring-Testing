@@ -186,4 +186,19 @@ class EmployeeServiceImplTest
 
         verify(employeeRepository, times(1)).findById(mockEmployeeDto.getId());
     }
+
+    @Test
+    void testDeleteEmployee_whenEmployeeDoesNotExists_thenThrowException()
+    {
+//        Arrange
+        when(employeeRepository.existsById(Id)).thenReturn(Boolean.FALSE);
+
+//        Act & Assert
+        Assertions.assertThatThrownBy(() -> employeeService.deleteEmployee(Id))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Employee not found with id: " + Id);
+
+        verify(employeeRepository, times(1)).existsById(Id);
+        verify(employeeRepository,never()).delete(any());
+    }
 }
