@@ -37,7 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService
     public EmployeeDto createNewEmployee(EmployeeDto employeeDto)
     {
         log.info("Creating new employee with email: {}", employeeDto.getEmail());
-        List<Employee> existingEmployees = employeeRepository.findByEmail(employeeDto.getEmail());      // storing entitiies which could have same email
+        List<Employee> existingEmployees = employeeRepository.findByEmail(employeeDto.getEmail());      // storing entities which could have same email
 
         if (!existingEmployees.isEmpty())
         {
